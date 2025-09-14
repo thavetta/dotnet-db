@@ -1,0 +1,41 @@
+# Build výstupy
+**/bin/
+**/obj/
+**/out/
+**/artifacts/
+
+# IDE
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.vs/
+.idea/
+*_ReSharper.Caches/
+
+# OS šumy
+.DS_Store
+Thumbs.db
+
+# Uživatelské/VS soubory
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logy a balíčky
+*.log
+*.nupkg
+*.snupkg
+packages/
+
+# Konfigurace (tajné/lokální)
+appsettings.Development.json
+appsettings.*.local.json
+
+# Databáze (SQLite apod.)
+*.db
+*.db-shm
+*.db-wal
+
+# Node / tooling (pokud máš front-end)
+node_modules/
