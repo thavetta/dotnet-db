@@ -1,11 +1,23 @@
-using Bookings.Domain;
-using Bookings.Infrastructure;
+using Bookings.Models;
+using Bookings.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var cs = builder.Configuration.GetConnectionString("SqlServer") ?? "Server=localhost;Database=Demo02_Bookings_MappingBasics;Trusted_Connection=True;TrustServerCertificate=True;";
-builder.Services.AddDbContext<BookingsDbContext>(o => o.UseSqlServer(cs).EnableRetryOnFailure().EnableSensitiveDataLogging());
+builder.Services
+    .AddDbContext<BookingsDbContext>(o => o.UseSqlServer(cs, sql => sql.EnableRetryOnFailure())
+    .EnableSensitiveDataLogging()
+    );
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<BookingsDbContext>();
+    db.Database.Migrate();
+}
+
 app.MapGet("/health", () => Results.Ok(new { ok = true }));
 app.MapPost("/seed", async (BookingsDbContext db) =>
 {

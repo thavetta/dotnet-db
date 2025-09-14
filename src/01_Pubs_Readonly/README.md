@@ -153,7 +153,7 @@
     using var db = new PubsContext(options);
     ```
 
-    1. Následně přidejte kód, který vybere z DB požadované informace a zobrazí je.
+1. Následně přidejte kód, který vybere z DB požadované informace a zobrazí je.
 
     ```cs
     var data = await db.Authors
