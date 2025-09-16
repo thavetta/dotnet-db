@@ -583,7 +583,7 @@ Rezervace s FK na `Room` a `Guest`, **owned `Price: Money`**, `Status` jako stri
 1. **Vygeneruj další prázdnou migraci** (v adresáři projektu `03_Bookings_MappingAdvanced`):
 
    ```bash
-   dotnet ef migrations add AdvancedMapping_View --ignore-changes -o Contexts/Migrations
+   dotnet ef migrations add AdvancedMapping_View -o Contexts/Migrations
    ```
 
 1. **Doplň VIEW** do `Up()` (TPC ⇒ `UNION ALL` přes `StandardRooms` a `Suites`):

@@ -1,0 +1,57 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Pubs_Readonly", "src\01_Pubs_Readonly\01_Pubs_Readonly.csproj", "{CDF3910A-3F05-AB44-35D5-22BCF38C2D79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_Bookings_MappingBasics", "src\02_Bookings_MappingBasics\02_Bookings_MappingBasics.csproj", "{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_Bookings_MappingAdvanced", "src\03_Bookings_MappingAdvanced\03_Bookings_MappingAdvanced.csproj", "{A6BE9F3C-4636-6E63-7393-F91059355B24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Bookings_Querying", "src\04_Bookings_Querying\04_Bookings_Querying.csproj", "{2B120BBC-CE89-01B7-7BCF-9AF598B2C321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_Bookings_SaveChanges_Migrations", "src\05_Bookings_SaveChanges_Migrations\05_Bookings_SaveChanges_Migrations.csproj", "{9257F0A7-B41C-887B-C323-0A9C92C7B2BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDF3910A-3F05-AB44-35D5-22BCF38C2D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDF3910A-3F05-AB44-35D5-22BCF38C2D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDF3910A-3F05-AB44-35D5-22BCF38C2D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDF3910A-3F05-AB44-35D5-22BCF38C2D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6BE9F3C-4636-6E63-7393-F91059355B24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BE9F3C-4636-6E63-7393-F91059355B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BE9F3C-4636-6E63-7393-F91059355B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BE9F3C-4636-6E63-7393-F91059355B24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B120BBC-CE89-01B7-7BCF-9AF598B2C321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B120BBC-CE89-01B7-7BCF-9AF598B2C321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B120BBC-CE89-01B7-7BCF-9AF598B2C321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B120BBC-CE89-01B7-7BCF-9AF598B2C321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9257F0A7-B41C-887B-C323-0A9C92C7B2BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9257F0A7-B41C-887B-C323-0A9C92C7B2BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9257F0A7-B41C-887B-C323-0A9C92C7B2BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9257F0A7-B41C-887B-C323-0A9C92C7B2BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDF3910A-3F05-AB44-35D5-22BCF38C2D79} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{4A84ECE1-1D09-BB86-F63D-3ED4EDCFC6B3} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{A6BE9F3C-4636-6E63-7393-F91059355B24} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{2B120BBC-CE89-01B7-7BCF-9AF598B2C321} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{9257F0A7-B41C-887B-C323-0A9C92C7B2BE} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F88E94B-A050-42EE-A545-87E23BC178D4}
+	EndGlobalSection
+EndGlobal
