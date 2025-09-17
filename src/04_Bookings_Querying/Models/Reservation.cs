@@ -14,7 +14,7 @@ public class Reservation
         Status = status;
     }
 
-    public static Reservation Create(Guid id, Guid guestId, int roomId, DateTime checkIn, DateTime checkOut, decimal amount)
+    public static Reservation Create(Guid id, Guid guestId, int roomId, DateTime checkIn, DateTime checkOut, decimal amount, string currency)
         => new Reservation(id, roomId, guestId, checkIn, checkOut, amount, ReservationStatus.Pending);
 
     private Reservation() { } // EF

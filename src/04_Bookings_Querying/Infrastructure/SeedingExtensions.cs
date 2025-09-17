@@ -37,9 +37,10 @@ public static class SeedingExtensions
 
         await db.AddRangeAsync(stdRooms);
         await db.AddRangeAsync(suites);
+        await db.SaveChangesAsync();
 
         // Guests
-        var guestFaker = new Faker<Guest>("en")
+            var guestFaker = new Faker<Guest>("en")
             .CustomInstantiator(f => new Guest(
                 Guid.NewGuid(),
                 f.Name.FullName(),
@@ -58,15 +59,16 @@ public static class SeedingExtensions
                 var nights = f.Random.Int(1, 10);
                 var to = from.AddDays(nights);
                 var room = f.PickRandom(allRooms);
+                var guest = f.PickRandom(guestsList);
                 var price = (decimal)nights * 100;
                 var total = Math.Round(price, 2);
                 return Reservation.Create(
                     Guid.NewGuid(),
-                    f.PickRandom(guestsList).Id,
+                    guest.Id,
                     room.Id,
                     from,
                     to,
-                    total);
+                    total,"EUR");
             })
             .FinishWith((f, r) => r.Status = f.PickRandom<ReservationStatus>())
                                 .Generate(reservations);
