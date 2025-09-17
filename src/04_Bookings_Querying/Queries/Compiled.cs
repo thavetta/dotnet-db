@@ -6,10 +6,10 @@ namespace Bookings.Queries;
 
 public static class Compiled
 {
-    public static readonly Func<BookingsDbContext, string, IAsyncEnumerable<Reservation>> ReservationsByGuestEmail =
-        EF.CompileAsyncQuery((BookingsDbContext db, string email) =>
+    public static readonly Func<BookingsDbContext, Email, IAsyncEnumerable<Reservation>> ReservationsByGuestEmail =
+        EF.CompileAsyncQuery((BookingsDbContext db, Email email) =>
             db.Reservations
-              .Where(r => r.Guest.Email.Value == email)
+              .Where(r => r.Guest.Email == email)
               .Include(r => r.Room)
               .OrderByDescending(r => r.CheckIn)
               .AsQueryable());

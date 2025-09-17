@@ -37,7 +37,7 @@ public static class Lab4Endpoints
         // Compiled query
         app.MapGet("/reservations/by-email", (BookingsDbContext db, string email) =>
         {
-            return Results.Ok(Compiled.ReservationsByGuestEmail(db, email));
+            return Results.Ok(Compiled.ReservationsByGuestEmail(db, Email.Create( email)));
         });
 
         // CRUD přes SP (nutno mapovat v OnModelCreating)

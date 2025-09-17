@@ -94,6 +94,8 @@ b.HasDbFunction(method!).HasName("fn_Nights").HasSchema("dbo");
 
             e.Property(x => x.Email)
                 .HasConversion(emailConverter)
+                .HasMaxLength(320)
+                .HasColumnType("nvarchar(320)")
                 .Metadata.SetValueComparer(emailComparer);
 
             // seed (j) – Guest
