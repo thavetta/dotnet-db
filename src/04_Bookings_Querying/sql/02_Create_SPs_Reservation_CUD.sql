@@ -24,11 +24,12 @@ CREATE OR ALTER PROCEDURE dbo.Reservation_Update
     @CheckIn datetime2,
     @CheckOut datetime2,
     @Status nvarchar(20),
+    @RowVersion varbinary(8),   -- původní hodnota z klienta
     @Amount decimal(18,2),
     @Currency nvarchar(3),
     @GuestId uniqueidentifier,
-    @RoomId int,
-    @RowVersion varbinary(8)   -- původní hodnota z klienta
+    @RoomId int
+    
 AS
 BEGIN
   SET NOCOUNT ON;
