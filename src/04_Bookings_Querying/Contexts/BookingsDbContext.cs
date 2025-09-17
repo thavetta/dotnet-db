@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Collections.Generic;
 using Bookings.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +15,52 @@ public class BookingsDbContext : DbContext
     public DbSet<Suite> Suites => Set<Suite>();
     public DbSet<Reservation> Reservations => Set<Reservation>();
     public DbSet<ReservationSummary> ReservationSummaries => Set<ReservationSummary>(); // (g) view
+
+    // (i) Shared-type entities: UserSettings/SystemSettings mapované na jednu tabulku
     public DbSet<Dictionary<string, object>> Settings => Set<Dictionary<string, object>>("Settings");
     
+
     public BookingsDbContext(DbContextOptions<BookingsDbContext> options) : base(options) { }
+    
 
     protected override void OnModelCreating(ModelBuilder b)
     {
         b.HasDefaultSchema("bookings");
 
+        // SP mapování
+
+        
+
+        b.Entity<Reservation>().UpdateUsingStoredProcedure("Reservation_Update", "dbo",
+        spb =>
+            {
+                spb.HasOriginalValueParameter(r => r.Id);
+
+                spb.HasParameter(r => r.CheckIn);
+                spb.HasParameter(r => r.CheckOut);
+                spb.HasParameter(r => r.Status);
+
+                // optimistická konkurence
+                spb.HasOriginalValueParameter(r => r.RowVersion);
+                spb.HasResultColumn(r => r.RowVersion);
+            });
+        b.Entity<Reservation>().DeleteUsingStoredProcedure("Reservation_Delete","dbo",
+        spb =>
+            {
+                spb.HasOriginalValueParameter(r => r.Id);
+                spb.HasOriginalValueParameter(r => r.RowVersion);
+            });
+
+// DbFunction mapování
+
+var method = typeof(Bookings.Infrastructure.MyDbFunctions).GetMethod(nameof(Bookings.Infrastructure.MyDbFunctions.Nights), new[] { typeof(DateTime), typeof(DateTime) });
+b.HasDbFunction(method!).HasName("fn_Nights").HasSchema("dbo");
+
+
         // ------- Guest -------
         b.Entity<Guest>(e =>
         {
+            e.Property(x => x.Id).ValueGeneratedNever();
             e.Property<DateTimeOffset>("CreatedAt").HasColumnType("datetimeoffset(7)").HasDefaultValueSql("SYSDATETIMEOFFSET()"); // (h) shadow property
             e.Property<DateTimeOffset?>("UpdatedAt").HasColumnType("datetimeoffset(7)"); // (h) shadow property
 
@@ -61,12 +97,12 @@ public class BookingsDbContext : DbContext
                 .Metadata.SetValueComparer(emailComparer);
 
             // seed (j) – Guest
-            e.HasData(new Guest(
-                id: Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                name: "Alice",
-                email: Email.Create("alice@example.com"),
-                isVip: true
-            ));
+            // e.HasData(new Guest(
+            //     id: Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+            //     name: "Alice",
+            //     email: Email.Create("alice@example.com"),
+            //     isVip: true
+            // ));
         });
 
         // ------- Room (TPC) -------
@@ -93,23 +129,51 @@ public class BookingsDbContext : DbContext
         // ------- Reservation -------
         b.Entity<Reservation>(e =>
         {
+            e.Property(x => x.Id).ValueGeneratedNever();
             e.Property(x => x.RowVersion).IsRowVersion();
             e.Property(x => x.Status).HasConversion<string>().HasMaxLength(20);
 
             e.HasOne(x => x.Room).WithMany().HasForeignKey(x => x.RoomId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne(x => x.Guest).WithMany().HasForeignKey(x => x.GuestId);
 
-            // Owned Money (dvě kolony) + seed owned dat (j)
-            e.OwnsOne(x => x.Price, o =>
+            e.InsertUsingStoredProcedure("Reservation_Insert","dbo", spb =>
             {
-                o.Property(p => p.Amount).HasColumnType("decimal(18,2)");
-                o.Property(p => p.Currency).HasMaxLength(3).IsRequired();
-                o.HasData(new
-                {
-                    ReservationId = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                    Amount = 120m,
-                    Currency = "EUR"
-                });
+                spb.HasParameter(r => r.Id);
+                spb.HasParameter(r => r.GuestId);
+                spb.HasParameter(r => r.RoomId);
+                
+                spb.HasParameter(r => r.CheckIn);
+                spb.HasParameter(r => r.CheckOut);
+                spb.HasParameter(r => r.Status);
+                spb.HasParameter(r => r.Amount);
+                spb.HasParameter(r => r.Currency);
+                
+                spb.HasResultColumn(r => r.RowVersion);
+            });
+
+            e.UpdateUsingStoredProcedure("Reservation_Update", "dbo",
+        spb =>
+            {
+                spb.HasOriginalValueParameter(r => r.Id);
+
+                spb.HasParameter(r => r.CheckIn);
+                spb.HasParameter(r => r.CheckOut);
+                spb.HasParameter(r => r.Status);
+                spb.HasParameter(r => r.Amount);
+                spb.HasParameter(r => r.Currency);
+                spb.HasParameter(r => r.GuestId);
+                spb.HasParameter(r => r.RoomId);
+
+                // optimistická konkurence
+                spb.HasOriginalValueParameter(r => r.RowVersion);
+                spb.HasResultColumn(r => r.RowVersion);
+            });
+
+            e.DeleteUsingStoredProcedure("Reservation_Delete","dbo",
+        spb =>
+            {
+                spb.HasOriginalValueParameter(r => r.Id);
+                spb.HasOriginalValueParameter(r => r.RowVersion);
             });
 
             e.HasIndex(x => new { x.RoomId, x.CheckIn, x.CheckOut });
@@ -122,6 +186,8 @@ public class BookingsDbContext : DbContext
                 GuestId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                 CheckIn = new DateTime(2025, 01, 10),
                 CheckOut = new DateTime(2025, 01, 12),
+                Amount = 120m,
+                Currency = "EUR",
                 Status = ReservationStatus.Confirmed
             });
         });
@@ -142,7 +208,7 @@ public class BookingsDbContext : DbContext
             e.HasKey("Id");
         });
 
-        
+
         // seed (j) – Settings
         b.SharedTypeEntity<Dictionary<string, object>>("Settings")
             .HasData(new Dictionary<string, object>

@@ -14,7 +14,7 @@ public class Guest
     public bool IsVip { get; private set; }         // (d) bool -> 'Y'/'N' converter
     public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
 
-    
+    // ctor with params (f)
     public Guest(Guid id, string name, Email email, bool isVip = false)
     {
         Id = id;
