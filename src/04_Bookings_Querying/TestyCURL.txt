@@ -1,0 +1,36 @@
+# 1) Seeding – vygeneruje data (idempotentní; přidej parametry)
+curl -X POST "http://localhost:51541/seed?guests=300&rooms=80&reservations=1200"
+
+# 2) Eager loading (Include navigací)
+curl "http://localhost:51541/reservations/eager"
+
+# 3) Lazy loading (vyžaduje EF Proxies + virtual navigace)
+curl "http://localhost:51541/reservations/lazy"
+
+# 4) Kompilovaná query – rezervace pro hosta podle emailu
+curl "http://localhost:51541/reservations/by-email?email=alice@example.com"
+
+# 5) CRUD přes uložené procedury
+# 5a) INSERT
+curl -X POST http://localhost:51541/reservations \
+     -H "Content-Type: application/json" \
+     -d '{
+           "guestId":"11111111-1111-1111-1111-111111111111",
+           "roomId":"1",
+           "from":"2025-09-20",
+           "to":"2025-09-23",
+           "total":{"value":300.0,"currency":"EUR"}
+         }'
+
+# 5b) UPDATE
+curl -X PUT http://localhost:51541/reservations/<reservation-id> -H "Content-Type: application/json" -d '{"from":"2025-09-21",  "to":"2025-09-24", "status":"checked" }'
+
+# 5c) DELETE
+curl -X DELETE http://localhost:51541/reservations/<reservation-id>
+
+# 6) Single-query vs. SplitQuery
+curl "http://localhost:51541/reservations/full"
+curl "http://localhost:51541/reservations/full-split"
+
+# 7) DbFunction (fn_Nights) – hosté s dlouhým pobytem
+curl "http://localhost:51541/stats/top-longstays?minNights=5"
